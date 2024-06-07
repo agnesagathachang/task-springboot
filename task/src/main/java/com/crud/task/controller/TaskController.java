@@ -20,24 +20,12 @@ public class TaskController {
     this.taskService = taskService;
   }
 
-  /**
-   * Create a new task.
-   *
-   * @param task the task to create
-   * @return the ResponseEntity with status 200 (OK) and with body of the new task
-   */
   @PostMapping("/addTask")
   public ResponseEntity<Task> saveTask(@RequestBody Task task) {
     Task newTask = taskService.saveTask(task);
     return ResponseEntity.ok(newTask);
   }
 
-  /**
-   * Get all tasks.
-   *
-   * @return the ResponseEntity with status 200 (OK) and with body of the list of
-   *         tasks
-   */
   @GetMapping("/tasks")
   public List<Task> getAllTasks() {
     return taskService.getAllTasks();
@@ -48,40 +36,24 @@ public class TaskController {
     return "halo";
   }
 
-  /**
-   * Get a task by ID.
-   *
-   * @param id the ID of the task to get
-   * @return the ResponseEntity with status 200 (OK) and with body of the task, or
-   *         with status 404 (Not Found) if the task does not exist
-   */
   @GetMapping("/tasks/{id}")
   public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
     Optional<Task> task = taskService.getTaskById(id);
     return task.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
-  /**
-   * Update a task by ID.
-   *
-   * @param id   the ID of the task to update
-   * @param task the updated task
-   * @return the ResponseEntity with status 200 (OK) and with body of the updated
-   *         task, or with status 404 (Not Found) if the task does not exist
-   */
+  @GetMapping("/tasks/status/{status}")
+  public ResponseEntity<List<Task>> getTasksByStatus(@PathVariable String status) {
+    List<Task> tasks = taskService.getTasksByStatus(status);
+    return ResponseEntity.ok(tasks);
+  }
+
   @PutMapping("/tasks/{id}")
   public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
     Task updatedTask = taskService.updateTask(id, task);
     return ResponseEntity.ok(updatedTask);
   }
 
-  /**
-   * Delete a task by ID.
-   *
-   * @param id the ID of the task to delete
-   * @return the ResponseEntity with status 200 (OK) and with body of the message
-   *         "Task deleted successfully"
-   */
   @DeleteMapping("/tasks/{id}")
   public ResponseEntity<String> deleteTask(@PathVariable Long id) {
     taskService.deleteTask(id);
