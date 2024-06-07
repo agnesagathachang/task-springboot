@@ -7,8 +7,28 @@ body {
   margin: 0 auto;
 }
 
+#taskForm,
+#updateForm {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 50px;
+}
+
+input {
+  margin: 5px 0;
+}
+
+#taskForm div {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: yellow;
+}
+
 h1 {
   text-align: center;
+  margin-bottom: 20px;
 }
 
 form {
@@ -16,13 +36,13 @@ form {
 }
 
 input[type="text"] {
-  width: 70%;
   padding: 10px;
-  margin-right: 10px;
 }
 
 button {
-  padding: 10px 20px;
+  padding: 10px 0;
+  margin-top: 10px;
+  width: 100%;
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -39,11 +59,12 @@ ul {
 }
 
 li {
+  margin-bottom: 5px;
   padding: 10px;
-  border-bottom: 1px solid #ccc;
+  border: 1px solid #007bff;
 }
 
-.completed {
-  text-decoration: line-through;
-  color: #777;
+#taskListsContainer {
+  line-height: 30px;
+  width: 100%;
 }

@@ -8,13 +8,54 @@
   </head>
   <body>
     <div class="container">
-      <h1>Task Manager</h1>
+      <h1>Task Lists</h1>
+      <div style="display: flex; justify-content: center">
+        <div id="taskListsContainer"></div>
+      </div>
+      <h1>Create New Task</h1>
       <form id="taskForm">
-        <input type="text" id="taskInput" placeholder="Enter task..." />
+        <input
+          type="text"
+          id="taskName"
+          placeholder="Enter task name..."
+          required
+        />
+        <input
+          type="text"
+          id="taskDescription"
+          placeholder="Enter task description..."
+          required
+        />
+        <input
+          type="text"
+          id="taskStatus"
+          placeholder="Enter status..."
+          required
+        />
+        <!-- <div> -->
         <button type="submit">Add Task</button>
+        <!-- </div> -->
       </form>
-      <ul id="taskList"></ul>
+      <h1>Update Task Status</h1>
+      <form id="updateForm">
+        <input
+          type="text"
+          id="taskId"
+          placeholder="Enter task id..."
+          required
+        />
+        <input
+          type="text"
+          id="newStatus"
+          placeholder="Enter new status..."
+          required
+        />
+        <!-- <div> -->
+        <button type="submit">Update Status</button>
+        <!-- </div> -->
+      </form>
     </div>
+
     <script src="script.js"></script>
   </body>
 </html>

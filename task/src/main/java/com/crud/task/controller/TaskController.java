@@ -47,8 +47,14 @@ public class TaskController {
 
   // Update Task by Id
   @PutMapping("/updateTask/{id}")
-  public String updateTask2(@PathVariable Long id, @RequestBody Task task) {
+  public String updateTask(@PathVariable Long id, @RequestBody Task task) {
     return taskService.updateTask(id, task);
+  }
+
+  // Update Task Status by Id
+  @PutMapping("/updateTask/{id}/{status}")
+  public String updateTask(@PathVariable Long id, @PathVariable String status) {
+    return taskService.updateTaskStatus(id, status);
   }
 
   // Delete Task by Id

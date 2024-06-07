@@ -65,6 +65,18 @@ public class TaskService {
     }
   }
 
+  public String updateTaskStatus(Long id, String status) {
+    Optional<Task> optionalTask = taskRepo.findById(id);
+    if (optionalTask.isPresent()) {
+      Task existingTask = optionalTask.get();
+      existingTask.setStatus(status);
+      taskRepo.save(existingTask);
+      return "Update success!";
+    } else {
+      throw new CustomErrorExceptionHandler("No such task exists!");
+    }
+  }
+
   public String deleteTask(Long id) {
     Task existingTask = taskRepo.findById(id)
         .orElse(null);
