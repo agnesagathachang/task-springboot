@@ -19,6 +19,12 @@ public class Task {
   @Column(nullable = false)
   private String status;
 
+  public Task(String name, String description, String status) {
+    this.name = name;
+    this.description = description;
+    this.status = status;
+  }
+
   public Long getId() {
     return id;
   }
