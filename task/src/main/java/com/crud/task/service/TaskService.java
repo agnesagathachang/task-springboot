@@ -1,6 +1,7 @@
 package com.crud.task.service;
 
 import com.crud.task.entity.Task;
+import com.crud.task.exception.CustomErrorExceptionHandler;
 import com.crud.task.repo.TaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,30 +24,56 @@ public class TaskService {
   }
 
   public List<Task> getAllTasks() {
-    return taskRepo.findAll();
+    List<Task> allTasks = taskRepo.findAll();
+    if (allTasks.isEmpty()) {
+      throw new CustomErrorExceptionHandler("No tasks found.");
+    }
+    return allTasks;
   }
 
   public Optional<Task> getTaskById(Long id) {
-    return taskRepo.findById(id);
+    Optional<Task> foundTask = taskRepo.findById(id);
+    if (foundTask.isEmpty()) {
+      throw new CustomErrorExceptionHandler("No tasks with id " + id + " found.");
+    }
+    return foundTask;
   }
 
   public List<Task> getTasksByStatus(String status) {
-    return taskRepo.findByStatus(status);
+    List<Task> foundTask = taskRepo.findByStatus(status);
+    if (foundTask.isEmpty()) {
+      throw new CustomErrorExceptionHandler("No tasks with status " + status + " found.");
+    }
+    return foundTask;
   }
 
-  public Task updateTask(Long id, Task updatedTask) {
-    Optional<Task> existingTask = taskRepo.findById(id);
-    if (existingTask.isPresent()) {
-      Task task = existingTask.get();
-      task.setName(updatedTask.getName());
-      task.setDescription(updatedTask.getDescription());
-      return taskRepo.save(task);
-    } else {
-      throw new RuntimeException("Task not found");
+  public String updateTask(Long id, Task task) {
+    Task existingTask = taskRepo.findById(id)
+        .orElse(null);
+    if (existingTask == null)
+      throw new CustomErrorExceptionHandler(
+          "No such task exists!");
+    else {
+      existingTask.setName(task.getName());
+      existingTask.setDescription(
+          task.getDescription());
+      existingTask.setName(task.getName());
+      existingTask.setStatus(
+          task.getStatus());
+      taskRepo.save(existingTask);
+      return "Update success!";
     }
   }
 
-  public void deleteTask(Long id) {
-    taskRepo.deleteById(id);
+  public String deleteTask(Long id) {
+    Task existingTask = taskRepo.findById(id)
+        .orElse(null);
+    if (existingTask == null)
+      throw new CustomErrorExceptionHandler(
+          "No such task exists!");
+    else {
+      taskRepo.deleteById(id);
+      return "Delete success!";
+    }
   }
 }
