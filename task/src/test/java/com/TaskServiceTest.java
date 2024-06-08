@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class TaskServiceTest {
@@ -61,14 +62,25 @@ public class TaskServiceTest {
   }
 
   @Test
-  public void testGetAllTasksEmpty() {
-    when(taskRepo.findAll()).thenReturn(new ArrayList<>());
+  public void testUpdateTask() {
+    long id = 1L;
+    Task existingTask = new Task("Existing Task", "Existing Description", "In Progress");
+    Task updateValue = new Task("Updated Task", "Updated Description", "Completed");
 
-    assertThrows(CustomErrorExceptionHandler.class, () -> {
-      taskService.getAllTasks();
-    });
+    when(taskRepo.findById(id)).thenReturn(Optional.of(existingTask));
+    when(taskRepo.save(any(Task.class))).thenReturn(updateValue);
 
-    verify(taskRepo, times(1)).findAll();
+    Task foundTask = taskService.getTaskById(id).orElse(null);
+    assertNotNull(foundTask);
+
+    String result = taskService.updateTask(id, updateValue);
+
+    assertEquals("Update success!", result);
+
+    verify(taskRepo, times(2)).findById(id);
+    verify(taskRepo, times(1)).save(existingTask);
+
+    assertEquals(updateValue.getName(), existingTask.getName());
   }
 
   @Test
@@ -86,15 +98,33 @@ public class TaskServiceTest {
   }
 
   @Test
-  public void testGetTaskByIdNotFound() {
+  public void testDeleteTaskSuccess() {
     long id = 1L;
-    when(taskRepo.findById(id)).thenReturn(Optional.empty());
+    Task existingTask = new Task("Task 1", "Description", "To Do");
 
-    assertThrows(CustomErrorExceptionHandler.class, () -> {
-      taskService.getTaskById(id);
-    });
+    when(taskRepo.findById(id)).thenReturn(Optional.of(existingTask));
+
+    String result = taskService.deleteTask(id);
+
+    assertEquals("Delete success!", result);
 
     verify(taskRepo, times(1)).findById(id);
+    verify(taskRepo, times(1)).deleteById(id);
   }
 
+  @Test
+  public void testDeleteTaskNotFound() {
+    long id = 1L;
+
+    when(taskRepo.findById(id)).thenReturn(Optional.empty());
+
+    CustomErrorExceptionHandler exception = assertThrows(CustomErrorExceptionHandler.class, () -> {
+      taskService.deleteTask(id);
+    });
+
+    assertEquals("No such task exists!", exception.getMessage());
+
+    verify(taskRepo, times(1)).findById(id);
+    verify(taskRepo, times(0)).deleteById(id);
+  }
 }

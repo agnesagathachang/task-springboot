@@ -19,6 +19,9 @@ public class Task {
   @Column(nullable = false)
   private String status;
 
+  public Task() {
+  }
+
   public Task(String name, String description, String status) {
     this.name = name;
     this.description = description;
@@ -56,5 +59,4 @@ public class Task {
   public void setStatus(String status) {
     this.status = status;
   }
-
 }
