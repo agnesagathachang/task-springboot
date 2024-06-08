@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
           taskList.className = "task-list";
           tasksById[taskId].forEach((task) => {
             const li = document.createElement("li");
-            li.innerHTML = `<strong>Id: ${taskId} <br> Name:</strong> ${task.name}<br><strong>Description:</strong> ${task.description}<br><strong>Status:</strong> ${task.status}`;
+            li.innerHTML = `<strong>Id:</strong> ${taskId} <br> <strong>Name:</strong> ${task.name}<br><strong>Description:</strong> ${task.description}<br><strong>Status:</strong> ${task.status}`;
 
             taskList.appendChild(li);
           });
